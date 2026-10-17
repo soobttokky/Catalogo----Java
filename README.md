@@ -1,4 +1,4 @@
-# Catálogo Simples de Livros, Séries e Filmes — Situação-Problema 2
+# Catálogo Simples de Livros, Séries e Filmes
 
 Tratamento de exceções e validação de dados no cadastro de itens
 (Java 17, Servlets, JSP/JSTL, JDBC, MySQL, JUnit 5).
