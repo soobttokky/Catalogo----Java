@@ -7,7 +7,11 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
@@ -85,9 +89,16 @@ public class Fluxos {
     static void check(String desc, boolean cond) { if (cond) ok++; else fail++; System.out.println("   [" + (cond ? "OK" : "FALHOU") + "] " + desc); }
     static void titulo(String t) { System.out.println("\n" + t); }
 
+    // referência forte: o LogManager guarda loggers só por referência fraca e o nível se perderia
+    static final java.util.logging.Logger LOG_RAIZ = java.util.logging.Logger.getLogger("br.com.catalogo");
+
     public static void main(String[] args) throws Exception {
+        // saída sempre em UTF-8, para os acentos saírem certos no console e em "> resultado_fluxos.txt"
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, StandardCharsets.UTF_8));
+        // remove qualquer driver real (ex.: MySQL no classpath) para os fluxos nunca tocarem num banco de verdade
+        for (Driver d : Collections.list(DriverManager.getDrivers())) DriverManager.deregisterDriver(d);
         DriverManager.registerDriver(new FakeDriver());
-        java.util.logging.Logger.getLogger("br.com.catalogo").setLevel(java.util.logging.Level.OFF); // silencia log no resumo
+        LOG_RAIZ.setLevel(java.util.logging.Level.OFF); // silencia log no resumo
         CadastrarItemServlet cad = new CadastrarItemServlet(); ListarItensServlet lis = new ListarItensServlet();
 
         titulo("Fluxo 1 - DAO.inserir com sucesso (try + finally)");
