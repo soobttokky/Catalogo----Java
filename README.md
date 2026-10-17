@@ -54,12 +54,3 @@ mas o servidor só aceita até o ano atual + 1.
 | Título com mais de 255 caracteres | Mensagem de limite de tamanho |
 | Banco desligado | Página `erro.jsp` com mensagem amigável (sem stack trace); detalhe no log |
 
-## Verificação dos fluxos (sem Tomcat e sem MySQL)
-
-`src/test/java/.../servlet/Fluxos.java` executa os Servlets, o DAO e o Validador reais usando um
-driver JDBC falso e requisição/resposta simuladas (qualquer driver real no classpath é desregistrado,
-então nenhum banco de verdade é tocado). Rode o método `main` pela IDE (ou
-`mvn test-compile exec:java -Dexec.classpathScope=test -Dexec.mainClass=br.com.catalogo.servlet.Fluxos`).
-A saída de referência está em `resultado_fluxos.txt`.
-Cobre 11 fluxos (30 verificações): cadastro válido, ano com letras, campos vazios, limites,
-SQL Injection, banco indisponível, erro inesperado, formulário e listagem.
